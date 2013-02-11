@@ -12,7 +12,7 @@ espacio de un div por ejemplo. Está dirigido a las personas que no quieren un d
 de desplazamiento y que tienen muy poco conocimiento de esta librería.
 
 ## Forma de uso
-Include this script after jQuery.
+Incluya este script después de jQuery.
 
 ``` html
 <script src='jquery.min.js'></script>
@@ -54,7 +54,7 @@ Include this script after jQuery.
 
 * jQuery >=1.4.2
 
-## License
+## Licencia
 
 Copyright(c) 2013 CREACIÓN WEB AMALFI
 Licensed under the MIT license.
