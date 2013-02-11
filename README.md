@@ -28,15 +28,8 @@ Include this script after jQuery.
 	})
 </script>
 ```
-+ `$(selector)` : jQueryObject
-+ `styles` : Object
-+ `[duration]` : Integer[ms]
-+ `[easing]` : String
-+ `[callback]` : Function
 
-## Example
-
-### Transform
+## Ejemplo
 
 ``` javascript
 // Crear scrollbars.
