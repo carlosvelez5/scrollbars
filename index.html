@@ -1,0 +1,367 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Scroll creado con jQuery y css</title>
+<script type="text/javascript">
+<!--http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js -->
+/*js/jquery-1.4.2.min.js
+http://code.jquery.com/jquery-1.4.4.js*/
+	!window.jQuery && document.write('<script src="http://code.jquery.com/jquery-1.4.4.js"><\/script>');
+</script>
+<!-- <script type="text/javascript" src="js/jquery.mousewheel.min.js"></script> -->
+<script type="text/javascript" src="js/jquery.scroll.js"></script>
+<script type="text/javascript" src="js/jquery.easing.1.3.js"></script>
+<script type="text/javascript" src="js/scroll_plugins/mouse.plugins.min.js"></script>
+<script type="text/javascript">
+function debug( wraps, settings, call_fun ){
+	if( window.console && window.console.log ) console.log( arguments );
+}
+
+$(document).ready(function() {
+	// Crear scrollbars.
+	$("#scroll2").scroll_bars({
+		// No animar scroll
+		animate:false,
+		// No ocultar barra
+		hide: false
+	});
+	
+	// Crear scrollbars.
+	$("#scroll3").scroll_bars({ 
+		// Velocidad
+		speed: 200,
+		// Funcion al subir el scroll
+		onTop : debug,
+		//clase_contenido : ".content_html",
+		onBottom : function( wraps, settings, call_fun ){
+			// Contenedor
+			var selector = this.selector;
+			
+			// Cargar contenido
+			cargar( false, selector );
+					
+			// Mostrar argumentos
+			debug( arguments );
+		},
+		// Evento al actualizar
+		onUpdate : debug
+	
+	// Mover contenedor al 50%
+	}).trigger('scroll_goto', [ "50%" ] );
+		
+	// Crear scrollbars.
+	$("#scroll").scroll_bars({
+		// Distancia a bajar cada vez que se ejecuta la funcion mousewhell
+		wheel : 120,
+		// Velocidad de la animacion
+		speed: 550, 
+		// Tamaño de la barra
+		bar_size : 207,
+		// Mostrar msgs
+		debug : true,
+		// Ocultar barra
+		hide: true
+		/*easing : 'easeOutQuart' //easeOutCirc'*/
+	});
+	
+	// Asignar evento de click
+	$("#conver").bind( 'click', convertir );
+	
+});
+
+function convertir( evt ){
+	// Crear scrollbars.
+	$( $('#divs').val() ).scroll_bars({
+		// Distancia a bajar cada vez que se ejecuta la funcion mousewhell
+		wheel : 120,
+		// Velocidad de la animacion
+		speed: 550, 
+		// Mostrar msgs
+		debug : true,
+		// Ocultar barra
+		hide: true
+	});
+}
+
+// Agrega contenido al scroll y lo actualiza.
+function cargar( bajar, wrap ){
+	// Elemento a agregar el html.
+	var div = $( wrap || $('#divs').val() );
+	
+	// Html a agregar
+	var html = '<p>Vivamus sed tellus quis orci dignissim scelerisque nec vitae est. Duis et elit ipsum. Vivamus turpis dui, \
+				sollicitudin eget rhoncus in, luctus vel fipit.</p><p>Elit inciderint omittantur duo ut, dicit democritum signiferumque eu est, \
+				ad suscipit delectus mandamus duo. An harum equidem maiestatis nec. At has veri feugait placerat, in semper offendit p</p><br>';
+
+	// Agregar contenido			
+	div.find( ".content_div" ).append( html );
+	
+	// Actualizar scroll.
+	div.trigger('scroll_update');
+	
+	// Bajar scroll
+	if( bajar )
+		div.trigger('gotobottom');
+	
+}
+
+// Elimina contenido.
+function remove_content( ){
+	// Elemento a eliminar contenido
+	var div = $('#divs').val();
+	
+	// Eliminar último parrafo
+	$( div ).find( " .content_div p:last" ).remove();
+	// Eliminar último salto de lína
+	$( div ).find(" .content_div br:last").remove();
+	
+	// Actulizar scroll.
+	$( div ).trigger('scroll_update');
+}
+
+// Baja, sube o remueve el scroll.
+function _actions ( action ){
+	// Elemento actual
+	var div = $("#divs").val();
+	
+	// Acciones: gototop scroll_remove gotobottom
+	switch ( action ){
+		// Subir scroll.
+		case "gototop" : 
+			// Llamar evento
+			$( div ).trigger( "gototop" );
+			
+		break;
+		
+		// Bajar scroll.
+		case "gotobottom" : 
+			// Llamar evento
+			$( div ).trigger( "gotobottom" );
+			
+		break;
+		
+		// Eliminar scroll.
+		case "scroll_remove" : 
+			// Llamar evento
+			$( div ).trigger( "scroll_remove" );
+			
+		break;
+	}  
+}
+
+</script>
+<style type="text/css">
+body {
+	padding: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	margin-left: 100px;
+}
+p {
+	font-family: Tahoma, Geneva, sans-serif;
+	font-size: 12px;
+	color: #666;
+	margin: 0px;
+	padding: 0px;
+}
+.content_div h3 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	font-weight: bold;
+	color: #333;
+	margin-top: 5px;
+	margin-right: 0px;
+	margin-bottom: 5px;
+	margin-left: 0px;
+}
+.div_scroll {
+	width: 400px;
+	height: 300px;
+	overflow: hidden;
+	padding-bottom: 5px;
+	float: left;
+	margin-right: 20px;
+	margin-bottom: 20px;
+	border: 1px solid #EAEAEA;
+	background-color: #FBFBFB;
+}
+.content_div {
+	padding: 20px;
+}
+.barra_scroll {
+	width: 7px;
+	/*border: 1px solid #EBEBEB;*/
+	-webkit-border-radius:3px;
+	border-radius:3px;
+	-moz-border-radius:3px;
+	overflow: visible;
+	position: relative;
+	float: right;
+	z-index: 2;
+	background-color: rgba(0, 0, 0, .07);
+}
+.barrita_scroll {
+	position: relative;
+	width: 7px;
+	-webkit-border-radius:3px;
+	border-radius:3px;
+	-moz-border-radius:3px;
+	cursor:pointer;
+	background-color:rgba(0, 0, 0, .3) !important;
+	/*border:1px solid rgba(85, 85, 85, .3) !important;*/
+	/* Internet */
+	filter:progid:DXImageTransform.Microsoft.Alpha(opacity=30);
+	background-color:rgb(0, 0, 0);
+}
+.content_div1 {
+	padding: 10px;
+}
+a {
+	color: #06C;
+	text-decoration: none;
+}
+</style>
+</head>
+
+<body>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p style="cursor:pointer"><span id="conver">Convertir div a scrollBars</span> - <span onclick="cargar();">Cargar</span> - <span onclick="cargar( true );">Cargar y bajar</span> - <span onclick="remove_content();">Eliminar</span> - <span onclick="_actions('gotobottom');">Ir a abajo</span> - <span onclick="_actions('gototop');">Ir arriba</span> <span onclick="_actions('scroll_remove');">- Remover scroll </span>
+  <select name="divs" id="divs">
+    <option value="#scroll">Div # 1</option>
+    <option value="#scroll2">Div # 2</option>
+    <option value="#scroll3" selected="selected">Div # 3 </option>
+  </select>
+</p>
+<p style="cursor:pointer">&nbsp;</p>
+<p>&nbsp;</p>
+<div id="scroll" class="div_scroll">
+  <div class="content_div" style="">
+    <h3>Magnis dis parturient montes</h3>
+    <p>&nbsp;</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vitae velit at velit pretium sodales. Maecenas egestas imperdiet mauris, vel elementum turpis iaculis eu. Duis egestas augue quis ante ornare eu tincidunt magna interdum. Vestibulum</p>
+    <p>&nbsp;</p>
+    <p><a onclick="$('#scroll').trigger('scroll_goto',['#titulo3']);">Ir al titulo de prueba</a> - <a onclick="$('#scroll').trigger('scroll_goto',['p:last']);">ir al ultimo parrafo</a></p>
+    <p>&nbsp;</p>
+    <p> posuere risus non ipsum sollicitudin quis viverra ante feugiat. Pellentesque non faucibus lorem. Nunc tincidunt diam nec risus ornare quis porttitor enim pretium. Ut adipiscing tempor massa, a ullamcorper massa bibendum at. Suspendisse potenti. In </p>
+    <p>&nbsp;</p>
+    <p>vestibulum enim orci, nec consequat turpis. Suspendisse sit amet tellus a quam volutpat porta. Mauris ornare augue ut diam tincidunt elementum. Vivamus commodo dapibus est, a gravida lorem pharetra eu. Maecenas ultrices cursus tellus sed congue. </p>
+    <p>&nbsp;</p>
+    <p><a onclick="$('#scroll').trigger('scroll_goto',['50%']);">Ir al 50%</a></p>
+    <p>&nbsp;</p>
+    <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Pellentesque eget mauris libero. Nulla sit amet felis in sem posuere laoreet ut quis elit. Aenean mauris massa, pretium non bibendum eget, elementum sed nibh. Nulla ac felis et purus adipiscing rutrum. Pellentesque a bibendum sapien. Vivamus erat quam, gravida sed ultricies ac, scelerisqu </p>
+    <p>&nbsp;</p>
+    <p>e sed velit. Integer mollis urna sit amet ligula aliquam ac sodales arcu euismod. Fusce fermentum augue in nulla cursus non fermentum lorem semper. Quisque eu auctor lacus. Donec justo justo, mollis vel tempor vitae, consequat eget velit.</p>
+    <p>&nbsp;</p>
+    <p><a onclick="$('#scroll').trigger('scroll_goto',['+10%']);">Bajar 10%</a>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p>Vivamus sed tellus quis orci dignissim scelerisque nec vitae est. Duis et elit ipsum. Aliquam pharetra auctor felis tempus tempor. Vivamus turpis dui, sollicitudin eget rhoncus in, luctus vel felis. Curabitur ultricies dictum justo at luctus. Nullam et quam et </p>
+    <p>&nbsp;</p>
+    <p><a onclick="$('#scroll').trigger('scroll_goto',['-5%']);">Subir 5%</a>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p>massa eleifend sollicitudin. Nulla mauris purus, sagittis id egestas eu, pellentesque et mi. Donec bibendum cursus nisi eget consequat. Nunc sit amet commodo metus. Integer consectetur lacus ac libero adipiscing ut tristique est viverra. Maecenas quam nibh, molestie nec pretium interdum, porta vitae magna. Maecenas at ligula eget neque imperdiet faucibus </p>
+    <p>&nbsp;</p>
+    <h3 id="titulo2">Titulo # 2</h3>
+    <p>&nbsp;</p>
+    <p>malesuada sed ipsum. Nulla auctor ligula sed nisl adipiscing vulputate. Curabitur ut ligula sed velit pharetra fringilla. Cras eu luctus est. Aliquam ac urna dui, eu rhoncus nibh. Nam id leo nisi, vel viverra nunc. Duis egestas pellentesque lectus, a placerat </p>
+    <p>&nbsp;</p>
+    <p>dolor egestas in. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec vitae ipsum non est iaculis suscipit.</p>
+    <br />
+    <p>Vivamus sed tellus quis orci dignissim scelerisque nec vitae est. Duis et elit ipsum. Aliquam pharetra auctor felis tempus tempor. Vivamus turpis dui, sollicitudin eget rhoncus in, luctus vel felis. Curabitur ultricies dictum justo at luctus. Nullam et quam et massa eleifend sollicitudin. Nulla mauris purus, sagittis id </p>
+    <p>&nbsp;</p>
+    <p>egestas eu, pellentesque et mi. Donec bibendum cursus nisi eget consequat. Nunc sit amet commodo metus. Integer consectetur lacus ac libero adipiscing ut tristique est viverra. </p>
+    <p>&nbsp;</p>
+    <p><a onclick="$('#scroll').trigger('scroll_goto',['500px']);">Ir al pixel 500</a></p>
+    <p>&nbsp;</p>
+    <p>Maecenas quam nibh, molestie nec pretium interdum, porta vitae magna. Maecenas at ligula eget neque imperdiet faucibus malesuada sed ipsum. Nulla auctor ligula sed nisl adipiscing vulputate. Curabitur ut ligula sed velit pharetra fringilla. Cras eu luctus est. Aliquam ac urna dui, eu rhoncus nibh. Nam id leo nisi, vel viverra nunc. Duis egestas pellentesque lectus, a placera</p>
+    <p>&nbsp;</p>
+    <h3 id="titulo3" style="color:#0066CC">Texto de prueba</h3>
+    <p>Vivamus sed tellus quis orci dignissim scelerisque nec vitae est. Duis et elit ipsum. Aliquam pharetra auctor felis tempus tempor. Vivamus turpis dui, sollicitudin eget rhoncus in, luctus vel felis. Curabitur ultricies dictum justo at luctus. Nullam et quam et massa eleifend sollicitudin. Nulla mauris purus, sagittis id egestas eu, pellentesque et mi. Donec bibendum cursus nisi eget consequat. Nunc sit amet commodo metus. Integer </p>
+    <p>&nbsp;</p>
+    <p><a onclick="$('#scroll').trigger('scroll_goto',['-50px']);">Subir 50px</a>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p>consectetur lacus ac libero adipiscing ut tristique est viverra. Maecenas quam nibh, molestie nec pretium interdum, porta vitae magna. Maecenas at ligula eget neque imperdiet faucibus malesuada sed ipsum. Nulla auctor ligula sed nisl adipiscing </p>
+    <p>&nbsp;</p>
+    <p><a onclick="$('#scroll').trigger('scroll_goto',['#titulo2']);">ir al titulo 2</a></p>
+    <p>&nbsp;</p>
+    <p>vulputate. Curabitur ut ligula sed velit pharetra fringilla. Cras eu luctus est. Aliquam ac urna dui, eu rhoncus nibh. Nam id leo nisi, vel viverra nunc. Duis egestas pellentesque lectus, a placerat dolor egestas in. Vestibulum ante ipsum primis in faucibus orci </p>
+    <p>&nbsp;</p>
+    <p>luctus et ultrices posuere cubilia Curae; Donec vitae ipsum non est iaculis suscipit.</p>
+    <br />
+    <p id="end">Final...</p>
+  </div>
+</div>
+<div style="width:250px; height:400px" id="scroll2" class="div_scroll">
+  <div class="content_div" style="padding:10px">
+    <h3 id="title_top">Magnis dis parturient</h3>
+    <p>&nbsp;</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vitae velit at velit pretium sodales.</p>
+    <p>&nbsp;</p>
+    <p><a onclick="$('#scroll2').trigger('scroll_goto',['#para2']);">Ir al parrafo 2</a></p>
+    <p>&nbsp;</p>
+    <p> Maecenas egestas imperdiet mauris, vel elementum turpis iaculis eu. Duis egestas augue quis ante ornare eu tincidunt magna interdum. </p>
+    <p>&nbsp;</p>
+    <p>Vestibulum posuere risus non ipsum sollicitudin quis viverra ante feugiat. Pellentesque non faucibus lorem. Nunc tincidunt diam nec risus ornare quis porttitor enim pretium.</p>
+    <p>&nbsp;</p>
+    <p><a onclick="$('#scroll2').trigger('scroll_goto',['#para3']);">Ir al parrafo 3</a>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p> Ut adipiscing tempor massa, a ullamcorper massa bibendum at. Suspendisse potenti. In vestibulum enim orci, nec consequat turpis</p>
+    <p>&nbsp;</p>
+    <p>Ut adipiscing tempor massa, a ullamcorper massa bibendum at. Suspendisse potenti. In vestibulum enim orci, nec consequat turpis.</p>
+    <p>&nbsp;</p>
+    <h3 id="para2">Parrafo # 2</h3>
+    <p>&nbsp;</p>
+    <p> Suspendisse sit amet tellus a quam volutpat porta. Mauris ornare augue ut diam tincidunt elementum.</p>
+    <p>&nbsp;</p>
+    <p> Vivamus commodo dapibus est, a gravida lorem pharetra eu. Maecenas ultrices cursus tellus sed congue. Cras nec nulla erat.</p>
+    <p>&nbsp;</p>
+    <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Pellentesque eget mauris libero.</p>
+    <p>&nbsp;</p>
+    <p> Nulla sit amet felis in sem posuere laoreet ut quis elit. Aenean mauris massa, pretium non bibendum eget, elementum sed nibh. Nulla ac felis et purus adipiscing rutrum. Pellentesque a bibendum sapien. </p>
+    <p>&nbsp;</p>
+    <h3 id="para3">Parrafo # 3</h3>
+    <p>&nbsp;</p>
+    <p>Vivamus erat quam, gravida sed ultricies ac, scelerisque sed velit. Integer mollis urna sit amet ligula aliquam ac sodales arcu euismod. Fusce fermentum augue in nulla cursus non fermentum lorem semper. Quisque eu auctor lacus. </p>
+    <p>&nbsp;</p>
+    <p>Donec justo justo, mollis vel tempor vitae, consequat eget velit.</p>
+    <p>&nbsp;</p>
+    <p>Vivamus sed tellus quis orci dignissim scelerisque nec vitae est. Duis et elit ipsum. Aliquam pharetra auctor felis tempus tempor.</p>
+    <p>&nbsp;</p>
+    <p> Vivamus turpis dui, sollicitudin eget rhoncus in, luctus vel felis. Curabitur ultricies dictum justo at luctus. Nullam et quam et massa eleifend sollicitudin. Nulla mauris purus, sagittis id egestas eu, </p>
+    <p>&nbsp;</p>
+    <p>pellentesque et mi. Donec bibendum cursus nisi eget consequat. Nunc sit amet commodo metus. Integer consectetur lacus ac libero adipiscing ut tristique est viverra. Maecenas quam nibh, molestie nec pretium interdum, porta vitae magna. Maecenas at ligula</p>
+    <p>&nbsp;</p>
+    <p> eget neque imperdiet faucibus malesuada sed ipsum. Nulla auctor ligula sed nisl adipiscing vulputate. Curabitur ut ligula sed velit pharetra fringilla. Cras eu luctus</p>
+    <p>&nbsp;</p>
+    <p><a onclick="$('#scroll2').trigger('scroll_goto',['#title_top']);">Volver al titulo principal</a>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p> est. Aliquam ac urna dui, eu rhoncus nibh. Nam id leo nisi, vel viverra nunc. Duis egestas pellentesque lectus, a placerat dolor ege</p>
+    <p>&nbsp;</p>
+    <p>stas in. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec vitae ipsum non est iaculis suscipit.</p>
+    <br />
+    <h3 onclick="$('#scroll2').trigger('gototop');">Ir arriba</h3>
+  </div>
+</div>
+<div id="scroll3" class="div_scroll">
+  <div class="content_div">
+    <h3>Magnis dis parturient montes </h3>
+    <p>&nbsp;</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vitae velit at velit pretium sodales. Maecenas egestas imperdiet mauris, vel elementum turpis iaculis eu. </p>
+    <p>&nbsp;</p>
+    <p>Duis egestas augue quis ante ornare eu tincidunt magna interdum. </p>
+    <p>&nbsp;</p>
+    <p>Vestibulum posuere risus non ipsum sollicitudin quis viverra ante feugiat. Pellenum. Vivamus commodo dapibus est, a gravida lorem pharetra eu. Maecenas ultrices cursus tellus sed congue. </p>
+    <p>&nbsp;</p>
+    <p> Lorem ipsum ad his scripta blandit partiendo, eum fastidii accumsan euripidis in, eum liber hendrerit an. Qui ut wisi vocibus suscipiantur, quo dicit ridens inciderint id. </p>
+    <p>&nbsp;</p>
+    <p>Dicunt maiorum eloquentiam cum cu, sit summo dolor essent te. Ne quodsi nusquam legendos has, ea dicit voluptua eloquentiam pro, ad sit quas qualisque. Eos vocibus deserunt quaestio ei. Blandit incorrupte quaerendum in quo, nibh impedit id vis, vel no nullam semper audiam. </p>
+    <p>&nbsp;</p>
+    <p>Final...</p>
+  </div>
+</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<div id="datos"> </div>
+</body>
+</html>
